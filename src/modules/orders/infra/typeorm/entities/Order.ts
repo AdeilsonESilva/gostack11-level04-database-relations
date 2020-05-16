@@ -14,25 +14,15 @@ import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrdersProduct
 @Entity('orders')
 class Order {
   @PrimaryGeneratedColumn('uuid')
-  @JoinColumn({ name: 'order_id' })
   id: string;
 
-  // @OneToMany(() => Customer, customer => customer.id, { eager: true })
-  // @ManyToOne(() => Customer, customer => customer.id)
-  // @JoinColumn({ name: 'customer_id' })
   @OneToOne(() => Customer)
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
-  @OneToMany(
-    type => OrdersProducts,
-    ordersProducts => ordersProducts.order_id,
-    {
-      // eager: true,
-      cascade: true,
-      // primary: true,
-    },
-  )
+  @OneToMany(() => OrdersProducts, ordersProducts => ordersProducts.order, {
+    cascade: true,
+  })
   order_products: OrdersProducts[];
 
   @CreateDateColumn()

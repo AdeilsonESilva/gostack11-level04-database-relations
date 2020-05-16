@@ -43,8 +43,6 @@ class CreateProductService {
 
     const productsData = await this.productsRepository.findAllById(productsIds);
 
-    console.log('productsData', productsData);
-
     const productsFinal = productsData.map(productData => {
       const productFinal = products.find(
         productFind => productFind.id === productData.id,
