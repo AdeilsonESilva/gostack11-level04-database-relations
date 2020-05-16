@@ -7,7 +7,10 @@
     "build": "tsc",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev  -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest",
+    "migration:run": "yarn typeorm migration:run",
+    "migration:create": "yarn typeorm migration:create -n",
+    "migration:revert": "yarn typeorm migration:revert"
   },
   "dependencies": {
     "cors": "^2.8.5",
