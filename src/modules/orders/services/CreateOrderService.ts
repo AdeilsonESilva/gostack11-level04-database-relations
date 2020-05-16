@@ -43,22 +43,32 @@ class CreateProductService {
 
     const productsData = await this.productsRepository.findAllById(productsIds);
 
-    const productsFinal = productsData.map(productData => {
-      const productFinal = products.find(
-        productFind => productFind.id === productData.id,
+    if (productsData.length === 0) {
+      throw new AppError('Product not found');
+    }
+
+    const orderProducts = products.map(product => {
+      const productData = productsData.find(
+        productDataFinded => productDataFinded.id === product.id,
       );
 
+      if (productData && productData?.quantity < product.quantity) {
+        throw new AppError('Product insufficient amount');
+      }
+
       return {
-        product_id: productData.id,
-        price: productData.price,
-        quantity: productFinal?.quantity || 0,
+        product_id: product.id,
+        price: productData?.price || 0,
+        quantity: product.quantity,
       };
     });
 
     const order = await this.ordersRepository.create({
       customer,
-      products: productsFinal,
+      products: orderProducts,
     });
+
+    await this.productsRepository.updateQuantity(products);
 
     return order;
   }
